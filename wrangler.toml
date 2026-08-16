@@ -1,0 +1,18 @@
+name = "irkop-api"
+main = "src/index.js"
+compatibility_date = "2026-08-16"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "irkop-api"
+database_id = "600db109-7320-495d-9acb-37216aa1857d"
+
+# Tambahkan binding ke database project lain di sini jika gateway ini
+# perlu query langsung (opsional, biasanya cukup lewat proxy ke Worker lain)
+# [[d1_databases]]
+# binding = "KONTER_DB"
+# database_name = "irkop-konter"
+# database_id = "<isi setelah database irkop-konter dibuat>"
+
+[vars]
+ENVIRONMENT = "production"
