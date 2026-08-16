@@ -1,7 +1,6 @@
 /**
- * Middleware verifikasi token/session.
- * Ganti implementasi verifikasi sesuai metode auth yang dipakai
- * (JWT, session token di D1, dll).
+ * Middleware verifikasi token/session untuk route yang butuh auth
+ * (/v1/konter, /v1/transaksi). Cek tabel sessions di database irkop-api.
  */
 export async function verifyAuth(request, env) {
   const authHeader = request.headers.get("Authorization");
@@ -12,16 +11,25 @@ export async function verifyAuth(request, env) {
 
   const token = authHeader.replace("Bearer ", "");
 
-  // TODO: ganti dengan verifikasi JWT asli, atau cek token di tabel sessions
-  const { results } = await env.DB.prepare(
+  const session = await env.DB.prepare(
     "SELECT * FROM sessions WHERE token = ? AND expires_at > ?"
   )
     .bind(token, Date.now())
-    .all();
+    .first();
 
-  if (!results || results.length === 0) {
+  if (!session) {
     return { valid: false };
   }
 
-  return { valid: true, user: results[0] };
+  const user = await env.DB.prepare(
+    "SELECT id, username, role FROM users WHERE id = ?"
+  )
+    .bind(session.user_id)
+    .first();
+
+  if (!user) {
+    return { valid: false };
+  }
+
+  return { valid: true, user };
 }

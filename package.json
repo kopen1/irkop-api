@@ -1,5 +1,5 @@
 {
-  "name": "irkop-api",
+  "name": "api",
   "version": "1.0.0",
   "private": true,
   "description": "Gateway API untuk seluruh project IRKOP",
