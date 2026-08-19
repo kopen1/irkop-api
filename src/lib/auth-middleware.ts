@@ -11,7 +11,7 @@ import type { Bindings } from '../index'
 
 // Wajib login (token valid) untuk akses route ini
 export const requireAuth: MiddlewareHandler<{ Bindings: Bindings }> = async (c, next) => {
-  const middleware = jwt({ secret: c.env.JWT_SECRET })
+  const middleware = jwt({ secret: c.env.JWT_SECRET, alg: 'HS256' })
   return middleware(c, next)
 }
 

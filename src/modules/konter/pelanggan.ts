@@ -6,48 +6,48 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 app.use('*', requireAuth)
 
-app.get('/profil', async (c) => {
+app.get('/', async (c) => {
   const db = c.env.DB_KONTER
-  const { results } = await db.prepare('SELECT * FROM kasbon_profiles ORDER BY id DESC').all()
+  const { results } = await db.prepare('SELECT * FROM customers WHERE merged_into_id IS NULL ORDER BY id DESC').all()
   return c.json(results)
 })
 
-app.post('/profil', async (c) => {
+app.post('/', async (c) => {
   const db = c.env.DB_KONTER
   const b = await c.req.json()
   const info = await db.prepare(
-    `INSERT INTO kasbon_profiles (name, total_debt, outlet_id, created_at)
+    `INSERT INTO customers (name, phone, outlet_id, created_at)
      VALUES (?, ?, 1, datetime('now'))`
-  ).bind(b.name, b.total_debt ?? 0).run()
+  ).bind(b.name, b.phone ?? null).run()
   const id = Number(info.meta?.last_row_id ?? 0)
-  const row = await db.prepare('SELECT * FROM kasbon_profiles WHERE id = ?').bind(id).first()
+  const row = await db.prepare('SELECT * FROM customers WHERE id = ?').bind(id).first()
   return c.json(row)
 })
 
-app.put('/profil/:id', async (c) => {
+app.put('/:id', async (c) => {
   const db = c.env.DB_KONTER
   const id = Number(c.req.param('id'))
   const b = await c.req.json()
   const fields: string[] = []
   const values: any[] = []
-  for (const f of ['name', 'total_debt']) {
+  for (const f of ['name', 'phone']) {
     if (b[f] !== undefined) {
       fields.push(`${f} = ?`)
-      values.push(f === 'total_debt' ? Number(b[f]) : b[f])
+      values.push(b[f])
     }
   }
   if (fields.length > 0) {
     values.push(id)
-    await db.prepare(`UPDATE kasbon_profiles SET ${fields.join(', ')} WHERE id = ?`).bind(...values).run()
+    await db.prepare(`UPDATE customers SET ${fields.join(', ')} WHERE id = ?`).bind(...values).run()
   }
-  const row = await db.prepare('SELECT * FROM kasbon_profiles WHERE id = ?').bind(id).first()
+  const row = await db.prepare('SELECT * FROM customers WHERE id = ?').bind(id).first()
   return c.json(row)
 })
 
-app.delete('/profil/:id', async (c) => {
+app.delete('/:id', async (c) => {
   const db = c.env.DB_KONTER
   const id = Number(c.req.param('id'))
-  await db.prepare('DELETE FROM kasbon_profiles WHERE id = ?').bind(id).run()
+  await db.prepare('DELETE FROM customers WHERE id = ?').bind(id).run()
   return c.json({ message: 'ok', id })
 })
 
