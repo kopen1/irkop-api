@@ -1,0 +1,4 @@
+# Salin file ini jadi .dev.vars untuk development lokal.
+# .dev.vars TIDAK ikut ke git (sudah di .gitignore).
+JWT_SECRET=ganti-dengan-string-acak-panjang-minimal-32-karakter
+NOTIFHOOK_SECRET=ganti-dengan-string-acak-lain-buat-notifhook

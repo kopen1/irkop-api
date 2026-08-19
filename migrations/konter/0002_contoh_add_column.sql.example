@@ -1,0 +1,19 @@
+-- ============================================================
+-- Migration 0002: CONTOH - jangan dijalankan kalau belum perlu.
+-- Ini cuma nunjukin pola: tiap perubahan struktur = file baru
+-- bernomor urut, isinya cuma DIFF (bukan tulis ulang semua tabel).
+--
+-- Cara bikin migration baru:
+--   wrangler d1 migrations create irkop-konter <nama_migration>
+-- Nanti otomatis kebuat file 000X_nama_migration.sql di folder ini.
+-- ============================================================
+
+-- Contoh: nambah kolom diskon di tabel products
+-- ALTER TABLE products ADD COLUMN diskon_persen INTEGER DEFAULT 0;
+
+-- Contoh: tabel baru
+-- CREATE TABLE IF NOT EXISTS suppliers (
+--   id TEXT PRIMARY KEY,
+--   name TEXT NOT NULL,
+--   created_at TEXT NOT NULL DEFAULT (datetime('now'))
+-- );

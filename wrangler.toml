@@ -1,0 +1,46 @@
+name = "irkop-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-01"
+
+# ============================================================
+# SECRETS - JANGAN pernah ditulis di sini / commit ke git.
+# Set sekali lewat terminal, tersimpan aman di Cloudflare:
+#
+#   wrangler secret put JWT_SECRET
+#   wrangler secret put NOTIFHOOK_SECRET
+#
+# Untuk dev lokal, buat file .dev.vars (sudah di-gitignore):
+#   JWT_SECRET=isi-secret-acak-panjang
+#   NOTIFHOOK_SECRET=isi-secret-lain
+# ============================================================
+
+[vars]
+# Origin frontend yang boleh akses API ini (pisah koma, tanpa spasi/slash akhir)
+ALLOWED_ORIGINS = "http://localhost:5173,https://konter-irkop.pages.dev"
+
+# ============================================================
+# INI SATU-SATUNYA BAGIAN YANG PERLU DIEDIT MANUAL SAAT
+# NAMBAH PROJECT BARU. Nama binding HARUS "DB_" + NAMA_PROJECT
+# huruf besar semua, karena module di src/modules/{project}/
+# memakai c.env.DB_{PROJECT} untuk akses database-nya.
+# ============================================================
+
+[[d1_databases]]
+binding = "DB_KONTER"
+database_name = "irkop-konter"
+database_id = "0bd22e31-92b0-4dfe-a28d-5a2ad2da2058"
+migrations_dir = "migrations/konter"
+
+# Contoh nambah project baru "listrik":
+# 1. wrangler d1 create irkop-listrik
+# 2. Tempel database_id ke bawah ini:
+#
+# [[d1_databases]]
+# binding = "DB_LISTRIK"
+# database_name = "irkop-listrik"
+# database_id = "REPLACE_WITH_DATABASE_ID"
+# migrations_dir = "migrations/listrik"
+#
+# 3. Buat folder src/modules/listrik/ isi auth.ts, data.ts, dll
+# 4. Buat folder migrations/listrik/ + migration pertama (schema awal)
+# 5. TIDAK PERLU edit src/index.ts - route otomatis kegenerate

@@ -1,0 +1,27 @@
+{
+  "name": "irkop-api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "generate:routes": "node scripts/generate-routes.mjs",
+    "predev": "npm run generate:routes",
+    "dev": "wrangler dev",
+    "prebuild": "npm run generate:routes",
+    "predeploy": "npm run generate:routes",
+    "deploy": "wrangler deploy",
+    "db:migrate:konter": "wrangler d1 migrations apply irkop-konter --local",
+    "db:migrate:konter:remote": "wrangler d1 migrations apply irkop-konter --remote",
+    "db:migrate:konter:new": "wrangler d1 migrations create irkop-konter",
+    "db:bootstrap:konter": "wrangler d1 execute irkop-konter --file=./seed/01-bootstrap-owner.sql",
+    "db:bootstrap:konter:remote": "wrangler d1 execute irkop-konter --file=./seed/01-bootstrap-owner.sql --remote",
+    "db:seed:konter": "wrangler d1 execute irkop-konter --file=./seed/02-sample-data.sql",
+    "db:seed:konter:remote": "wrangler d1 execute irkop-konter --file=./seed/02-sample-data.sql --remote"
+  },
+  "dependencies": {
+    "hono": "^4.6.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0",
+    "typescript": "^5.5.0"
+  }
+}
