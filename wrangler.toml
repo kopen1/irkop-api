@@ -1,4 +1,4 @@
-name = "irkop-api"
+name = "api"
 main = "src/index.ts"
 compatibility_date = "2026-08-01"
 
@@ -29,7 +29,6 @@ ALLOWED_ORIGINS = "http://localhost:5173,https://konter-irkop.pages.dev"
 binding = "DB_KONTER"
 database_name = "irkop-konter"
 database_id = "0bd22e31-92b0-4dfe-a28d-5a2ad2da2058"
-migrations_dir = "migrations/konter"
 
 # Contoh nambah project baru "listrik":
 # 1. wrangler d1 create irkop-listrik
